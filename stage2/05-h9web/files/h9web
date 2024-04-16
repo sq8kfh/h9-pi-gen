@@ -1,0 +1,34 @@
+upstream h9web {
+    server 127.0.0.1:8888;
+}
+
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+
+    # Allow file uploads
+    client_max_body_size 50M;
+
+    location ^~ /assets/ {
+        root /home/FIRST_USER_NAME/h9web/web/dist/h9/;
+        if ($query_string) {
+            expires max;
+        }
+    }
+    
+    location = /favicon.png {
+        rewrite (.*) /assets/favicon.png;
+    }
+    
+    location / {
+        proxy_pass_header Server;
+        proxy_set_header Host $http_host;
+        proxy_redirect off;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Scheme $scheme;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "Upgrade";
+        proxy_pass http://h9web;
+    }
+}

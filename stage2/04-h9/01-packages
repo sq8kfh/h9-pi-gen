@@ -1,0 +1,10 @@
+git
+python3-dev
+libspdlog-dev
+nlohmann-json3-dev
+libreadline-dev
+flex
+bison
+libconfuse-dev
+libxml2-dev
+cmake
